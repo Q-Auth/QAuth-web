@@ -42,6 +42,3 @@ next-env.d.ts
 
 # OpenNext output
 /.open-next/
-
-# Vite output
-/dist/

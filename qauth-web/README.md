@@ -1,6 +1,6 @@
 # QAuth Web
 
-这是一个 Next.js 16 项目，已配置为 **Cloudflare Workers** 可直接部署。
+QAuth Web 已重构为 **Vue 3 + Vite + Tailwind CSS + shadcn 风格组件** 的单页应用。页面保留 QAuth 的产品首页、完整 Demo、Docs、安全设计和路线图，并通过右上角语言按钮在中文与英文之间切换。
 
 ## 本地开发
 
@@ -9,39 +9,30 @@ npm install
 npm run dev
 ```
 
-## Cloudflare Workers 部署（默认配置可用）
-
-### 1) 首次登录 Cloudflare
+## 生产构建
 
 ```bash
-npx wrangler login
+npm run build
+npm run preview
 ```
 
-### 2) 一键构建并部署
+## Cloudflare Pages 部署
 
 ```bash
 npm run cf:deploy
 ```
 
-> 以上命令会先用 OpenNext 构建 Worker 输出，再调用 Wrangler 部署。
-
-## Cloudflare Pages（Git）里如何填 Build 设置
-
-如果你使用 Cloudflare Dashboard 的 Git 自动部署，请使用：
+如果使用 Cloudflare Dashboard 的 Git 自动部署，请填写：
 
 - **Build command**: `npm run cf:build`
-- **Build output directory**: `.open-next/assets`
-
-并在项目根目录保留 `wrangler.jsonc`（本仓库已提供），这样默认流程即可识别 Worker 入口和静态资源目录。
-
-## 为什么你之前报错（WORKER_SELF_REFERENCE）
-
-你截图中的错误是：服务绑定 `WORKER_SELF_REFERENCE` 指向了 `qauth-web`，但该 Worker 在账号里不存在。
-
-本仓库当前配置 **不需要** 这个 service binding。请在 Cloudflare Dashboard 的 Worker/Pages 设置中删除旧的 `WORKER_SELF_REFERENCE` 绑定（如果存在），然后重新部署。
+- **Build output directory**: `dist`
 
 ## 可用命令
 
-- `npm run cf:build`：构建 Cloudflare Worker 产物
-- `npm run cf:preview`：本地预览 Worker
-- `npm run cf:deploy`：构建并发布到 Cloudflare
+- `npm run dev`：启动 Vite 本地开发服务
+- `npm run build`：构建静态产物到 `dist`
+- `npm run preview`：本地预览生产产物
+- `npm run lint`：运行 `vue-tsc --noEmit` 类型检查
+- `npm run cf:build`：构建 Cloudflare Pages 产物
+- `npm run cf:preview`：构建并使用 Wrangler 本地预览 Pages 产物
+- `npm run cf:deploy`：构建并部署到 Cloudflare Pages
